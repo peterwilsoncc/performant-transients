@@ -3,8 +3,8 @@
  * Performant Transients
  *
  * @package           PerformantTransients
- * @author            Peter Wilsom
- * @copyright         2024 Peter Wilsom
+ * @author            Peter Wilson
+ * @copyright         2024 Peter Wilson
  * @license           GPL-2.0-or-later
  *
  * @wordpress-plugin
@@ -13,7 +13,7 @@
  * Version:           1.0.0
  * Requires at least: 6.4
  * Requires PHP:      7.2
- * Author:            Peter Wilsom
+ * Author:            Peter Wilson
  * Author URI:        https://peterwilson.cc/
  * Text Domain:       performant-transients
  * License:           MIT
@@ -82,7 +82,7 @@ function maybe_prime_transient_cache( $pre, $option_name ) {
 	$alloptions = wp_load_alloptions();
 	if ( isset( $alloptions[ '_transient_' . $transient_name ] ) ) {
 		/*
-		 * If the transinet is in all options it does not have a timeout
+		 * If the transient is in all options it does not have a timeout
 		 * and does not need to be primed.
 		 */
 		return $pre;

@@ -2,7 +2,7 @@
 
 A WordPress plugin to reduce the number of database calls querying transients
 
-This is a utiltiy plugin for backporting a minor performance improvement scheduled for inclusion in WordPress 6.6 to earlier versions.
+This is a utility plugin for backporting a minor performance improvement scheduled for inclusion in WordPress 6.6 to earlier versions.
 
 In WordPress 6.4 the function `wp_prime_option_caches()` was introduced to allow for multiple options to be queried in a single database call.
 
