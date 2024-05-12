@@ -10,4 +10,4 @@ On sites without a persistent cache, temporary transients are stored in two opti
 
 In WordPress 6.6 and later, these options are primed by a single database call using the priming function. This plugin can be used on WordPress 6.4 and 6.5 to backport the functionality.
 
-While a mild improvement on sites making limited use of transients, this can significantly reduce the number of databse queries on sites running plugins making heavy use of transients.
+While a mild improvement on sites making limited use of transients, this can significantly reduce the number of database queries on sites running plugins making heavy use of transients.
