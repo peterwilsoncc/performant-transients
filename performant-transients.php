@@ -34,7 +34,6 @@ function bootstrap() {
 	if (
 		! function_exists( 'wp_prime_option_caches' )
 		|| ! function_exists( 'str_starts_with' )
-		|| is_wp_version_compatible( '6.6' )
 	) {
 		/*
 		 * Do nothing if required functions are not available or the
@@ -54,6 +53,10 @@ bootstrap();
  * If the transient being queried is an expiring transient, prime the
  * cache for both the transient and its timeout options.
  *
+ * On single site installs, site transients are also primed. On multisite
+ * installs site transients are not stored in the option table so can
+ * not be primed.
+ *
  * Runs on the `pre_option` filter.
  *
  * Although this runs on the `pre_option` filter, it does not actually
@@ -67,20 +70,31 @@ bootstrap();
  */
 function maybe_prime_transient_cache( $pre, $option_name ) {
 	if (
-		! str_starts_with( $option_name, '_transient_' )
+		(
+			! str_starts_with( $option_name, '_site_transient_' )
+			&& ! str_starts_with( $option_name, '_transient_' )
+		)
 		|| false !== $pre
 	) {
 		return $pre;
 	}
 
-	if ( str_starts_with( $option_name, '_transient_timeout_' ) ) {
-		$transient_name = substr( $option_name, 19 );
+	$site           = '';
+	$transient_name = $option_name;
+
+	if ( str_starts_with( $transient_name, '_site' ) ) {
+		$site           = '_site';
+		$transient_name = substr( $transient_name, 5 );
+	}
+
+	if ( str_starts_with( $transient_name, '_transient_timeout_' ) ) {
+		$transient_name = substr( $transient_name, 19 );
 	} else {
-		$transient_name = substr( $option_name, 11 );
+		$transient_name = substr( $transient_name, 11 );
 	}
 
 	$alloptions = wp_load_alloptions();
-	if ( isset( $alloptions[ '_transient_' . $transient_name ] ) ) {
+	if ( isset( $alloptions[ "{$site}_transient_{$transient_name}" ] ) ) {
 		/*
 		 * If the transient is in all options it does not have a timeout
 		 * and does not need to be primed.
@@ -89,8 +103,8 @@ function maybe_prime_transient_cache( $pre, $option_name ) {
 	}
 
 	$option_names = array(
-		'_transient_' . $transient_name,
-		'_transient_timeout_' . $transient_name,
+		"{$site}_transient_{$transient_name}",
+		"{$site}_transient_timeout_{$transient_name}",
 	);
 
 	wp_prime_option_caches( $option_names );
